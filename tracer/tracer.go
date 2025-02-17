@@ -17,15 +17,15 @@ func Vector(x, y, z float64) Tuple {
 	return Tuple{x, y, z, VectorW}
 }
 
-func (t *Tuple) IsPoint() bool {
+func (t Tuple) IsPoint() bool {
 	return t.W == PointW
 }
 
-func (t *Tuple) IsVector() bool {
+func (t Tuple) IsVector() bool {
 	return t.W == VectorW
 }
 
-func (t *Tuple) Add(other Tuple) Tuple {
+func (t Tuple) Add(other Tuple) Tuple {
 	return Tuple{
 		X: t.X + other.X,
 		Y: t.Y + other.Y,
@@ -34,7 +34,7 @@ func (t *Tuple) Add(other Tuple) Tuple {
 	}
 }
 
-func (t *Tuple) Subtract(other Tuple) Tuple {
+func (t Tuple) Subtract(other Tuple) Tuple {
 	return Tuple{
 		X: t.X - other.X,
 		Y: t.Y - other.Y,
@@ -43,7 +43,7 @@ func (t *Tuple) Subtract(other Tuple) Tuple {
 	}
 }
 
-func (t *Tuple) Negate() Tuple {
+func (t Tuple) Negate() Tuple {
 	return Tuple{
 		X: -t.X,
 		Y: -t.Y,
@@ -52,20 +52,20 @@ func (t *Tuple) Negate() Tuple {
 	}
 }
 
-func (t *Tuple) Multiply(scalar float64) Tuple {
+func (t Tuple) Multiply(scalar float64) Tuple {
 	return Tuple{
 		X: t.X * scalar,
 		Y: t.Y * scalar,
 		Z: t.Z * scalar,
-		W: t.W * scalar,
+		W: t.W,
 	}
 }
 
-func (t *Tuple) Divide(scalar float64) Tuple {
+func (t Tuple) Divide(scalar float64) Tuple {
 	return Tuple{
 		X: t.X / scalar,
 		Y: t.Y / scalar,
 		Z: t.Z / scalar,
-		W: t.W / scalar,
+		W: t.W,
 	}
 }
