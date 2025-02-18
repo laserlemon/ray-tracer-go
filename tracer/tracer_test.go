@@ -92,7 +92,7 @@ func TestAdd(t *testing.T) {
 
 		result, err := point1.Add(point2)
 
-		assert.Error(t, err)
+		assert.ErrorIs(t, err, ErrCannotAddPoints)
 		assert.Zero(t, result)
 	})
 }
@@ -124,7 +124,7 @@ func TestSubtract(t *testing.T) {
 
 		result, err := point2.Subtract(point1)
 
-		assert.Error(t, err)
+		assert.ErrorIs(t, err, ErrCannotSubtractPoint)
 		assert.Zero(t, result)
 	})
 
@@ -134,7 +134,7 @@ func TestSubtract(t *testing.T) {
 
 		result, err := vector.Subtract(point)
 
-		assert.Error(t, err)
+		assert.ErrorIs(t, err, ErrCannotSubtractPoint)
 		assert.Zero(t, result)
 	})
 }
@@ -154,7 +154,7 @@ func TestNegate(t *testing.T) {
 
 		result, err := point.Negate()
 
-		assert.Error(t, err)
+		assert.ErrorIs(t, err, ErrCannotNegatePoint)
 		assert.Zero(t, result)
 	})
 }
