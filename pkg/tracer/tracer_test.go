@@ -192,6 +192,37 @@ func TestMagnitude(t *testing.T) {
 	})
 
 	t.Run("cannot calculate the magnitude of a point", func(t *testing.T) {
+		point := NewPoint(2.0, 3.0, 6.0)
+
+		result, err := point.Magnitude()
+
+		assert.ErrorIs(t, err, ErrCannotMeasurePoint)
+		assert.Zero(t, result)
+	})
+}
+
+func TestNormalize(t *testing.T) {
+	t.Run("normalizes a vector into a unit vector", func(t *testing.T) {
+		vector := NewVector(2.0, 3.0, 6.0)
+
+		result, err := vector.Normalize()
+		require.NoError(t, err)
+
+		assertTupleEqual(t, NewVector(2.0/7.0, 3.0/7.0, 6.0/7.0), result)
+
+		magnitude, err := result.Magnitude()
+		require.NoError(t, err)
+
+		assert.InDelta(t, 1.0, magnitude, epsilon)
+	})
+
+	t.Run("cannot normalize a point", func(t *testing.T) {
+		point := NewPoint(2.0, 3.0, 6.0)
+
+		result, err := point.Normalize()
+
+		assert.ErrorIs(t, err, ErrCannotNormalizePoint)
+		assert.Zero(t, result)
 	})
 }
 

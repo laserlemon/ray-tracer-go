@@ -11,10 +11,11 @@ const (
 )
 
 var (
-	ErrCannotAddPoints     = errors.New("cannot add two points")
-	ErrCannotSubtractPoint = errors.New("cannot subtract a point")
-	ErrCannotNegatePoint   = errors.New("cannot negate a point")
-	ErrCannotMeasurePoint  = errors.New("cannot measure a point")
+	ErrCannotAddPoints      = errors.New("cannot add two points")
+	ErrCannotMeasurePoint   = errors.New("cannot measure a point")
+	ErrCannotNegatePoint    = errors.New("cannot negate a point")
+	ErrCannotNormalizePoint = errors.New("cannot normalize a point")
+	ErrCannotSubtractPoint  = errors.New("cannot subtract a point")
 )
 
 type Tuple struct {
@@ -100,4 +101,17 @@ func (t Tuple) Magnitude() (float64, error) {
 	}
 
 	return math.Sqrt(math.Pow(t.X, 2) + math.Pow(t.Y, 2) + math.Pow(t.Z, 2)), nil
+}
+
+func (t Tuple) Normalize() (Tuple, error) {
+	if t.IsPoint() {
+		return Tuple{}, ErrCannotNormalizePoint
+	}
+
+	magnitude, err := t.Magnitude()
+	if err != nil {
+		return Tuple{}, err
+	}
+
+	return t.Divide(magnitude)
 }
