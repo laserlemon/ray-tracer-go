@@ -1,71 +1,91 @@
 package tracer
 
+import "errors"
+
 const (
-	PointW  = float64(1.0)
-	VectorW = float64(0.0)
+	pointW  = float64(1.0)
+	vectorW = float64(0.0)
+)
+
+var (
+	ErrCannotAddPoints     = errors.New("cannot add two points")
+	ErrCannotSubtractPoint = errors.New("cannot subtract a point")
+	ErrCannotNegatePoint   = errors.New("cannot negate a point")
 )
 
 type Tuple struct {
 	X, Y, Z, W float64
 }
 
-func Point(x, y, z float64) Tuple {
-	return Tuple{x, y, z, PointW}
+func NewPoint(x, y, z float64) Tuple {
+	return Tuple{x, y, z, pointW}
 }
 
-func Vector(x, y, z float64) Tuple {
-	return Tuple{x, y, z, VectorW}
+func NewVector(x, y, z float64) Tuple {
+	return Tuple{x, y, z, vectorW}
 }
 
 func (t Tuple) IsPoint() bool {
-	return t.W == PointW
+	return t.W == pointW
 }
 
 func (t Tuple) IsVector() bool {
-	return t.W == VectorW
+	return t.W == vectorW
 }
 
-func (t Tuple) Add(other Tuple) Tuple {
+func (t Tuple) Add(other Tuple) (Tuple, error) {
+	if t.IsPoint() && other.IsPoint() {
+		return Tuple{}, ErrCannotAddPoints
+	}
+
 	return Tuple{
 		X: t.X + other.X,
 		Y: t.Y + other.Y,
 		Z: t.Z + other.Z,
 		W: t.W + other.W,
-	}
+	}, nil
 }
 
-func (t Tuple) Subtract(other Tuple) Tuple {
+func (t Tuple) Subtract(other Tuple) (Tuple, error) {
+	if other.IsPoint() {
+		return Tuple{}, ErrCannotSubtractPoint
+	}
+
 	return Tuple{
 		X: t.X - other.X,
 		Y: t.Y - other.Y,
 		Z: t.Z - other.Z,
 		W: t.W - other.W,
-	}
+	}, nil
 }
 
-func (t Tuple) Negate() Tuple {
+func (t Tuple) Negate() (Tuple, error) {
+	if t.IsPoint() {
+		return Tuple{}, ErrCannotNegatePoint
+	}
+
 	return Tuple{
 		X: -t.X,
 		Y: -t.Y,
 		Z: -t.Z,
 		W: -t.W,
-	}
+	}, nil
 }
 
-func (t Tuple) Multiply(scalar float64) Tuple {
+func (t Tuple) Multiply(scalar float64) (Tuple, error) {
 	return Tuple{
 		X: t.X * scalar,
 		Y: t.Y * scalar,
 		Z: t.Z * scalar,
 		W: t.W,
-	}
+	}, nil
 }
 
-func (t Tuple) Divide(scalar float64) Tuple {
+func (t Tuple) Divide(scalar float64) (Tuple, error) {
 	return Tuple{
 		X: t.X / scalar,
 		Y: t.Y / scalar,
 		Z: t.Z / scalar,
 		W: t.W,
-	}
+	}, nil
 }
