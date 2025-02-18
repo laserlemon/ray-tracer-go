@@ -226,6 +226,53 @@ func TestNormalize(t *testing.T) {
 	})
 }
 
+func TestDot(t *testing.T) {
+	t.Run("calculates the dot product of two vectors", func(t *testing.T) {
+		vector1 := NewVector(1, 2, 3)
+		vector2 := NewVector(2, 3, 4)
+
+		result1, err := vector1.Dot(vector2)
+		require.NoError(t, err)
+
+		assert.Equal(t, float64(20), result1)
+
+		result2, err := vector2.Dot(vector1)
+		require.NoError(t, err)
+
+		assert.Equal(t, float64(20), result2)
+	})
+
+	t.Run("cannot calculate the dot product of a point and a vector", func(t *testing.T) {
+		point := NewPoint(1, 2, 3)
+		vector := NewVector(2, 3, 4)
+
+		result, err := point.Dot(vector)
+
+		assert.ErrorIs(t, err, ErrCannotDotPoint)
+		assert.Zero(t, result)
+	})
+
+	t.Run("cannot calculate the dot product of a vector and a point", func(t *testing.T) {
+		vector := NewVector(1, 2, 3)
+		point := NewPoint(2, 3, 4)
+
+		result, err := vector.Dot(point)
+
+		assert.ErrorIs(t, err, ErrCannotDotPoint)
+		assert.Zero(t, result)
+	})
+
+	t.Run("cannot calculate the dot product of two points", func(t *testing.T) {
+		point1 := NewPoint(1, 2, 3)
+		point2 := NewPoint(2, 3, 4)
+
+		result, err := point1.Dot(point2)
+
+		assert.ErrorIs(t, err, ErrCannotDotPoint)
+		assert.Zero(t, result)
+	})
+}
+
 func assertTupleEqual(t *testing.T, expected, actual Tuple) {
 	t.Helper()
 

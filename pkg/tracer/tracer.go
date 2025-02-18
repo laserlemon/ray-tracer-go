@@ -12,6 +12,7 @@ const (
 
 var (
 	ErrCannotAddPoints      = errors.New("cannot add two points")
+	ErrCannotDotPoint       = errors.New("cannot dot a point")
 	ErrCannotMeasurePoint   = errors.New("cannot measure a point")
 	ErrCannotNegatePoint    = errors.New("cannot negate a point")
 	ErrCannotNormalizePoint = errors.New("cannot normalize a point")
@@ -111,4 +112,12 @@ func (t Tuple) Normalize() (Tuple, error) {
 	magnitude, _ := t.Magnitude()
 
 	return t.Divide(magnitude)
+}
+
+func (t Tuple) Dot(other Tuple) (float64, error) {
+	if t.IsPoint() || other.IsPoint() {
+		return 0, ErrCannotDotPoint
+	}
+
+	return t.X*other.X + t.Y*other.Y + t.Z*other.Z, nil
 }
