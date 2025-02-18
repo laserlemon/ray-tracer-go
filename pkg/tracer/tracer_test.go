@@ -273,6 +273,53 @@ func TestDot(t *testing.T) {
 	})
 }
 
+func TestCross(t *testing.T) {
+	t.Run("calculates the cross product of two vectors", func(t *testing.T) {
+		vector1 := NewVector(1, 2, 3)
+		vector2 := NewVector(2, 3, 4)
+
+		result1, err := vector1.Cross(vector2)
+		require.NoError(t, err)
+
+		assertTupleEqual(t, NewVector(-1, 2, -1), result1)
+
+		result2, err := vector2.Cross(vector1)
+		require.NoError(t, err)
+
+		assertTupleEqual(t, NewVector(1, -2, 1), result2)
+	})
+
+	t.Run("cannot calculate the cross product of a point and a vector", func(t *testing.T) {
+		point := NewPoint(1, 2, 3)
+		vector := NewVector(2, 3, 4)
+
+		result, err := point.Cross(vector)
+
+		assert.ErrorIs(t, err, ErrCannotCrossPoint)
+		assert.Zero(t, result)
+	})
+
+	t.Run("cannot calculate the cross product of a vector and a point", func(t *testing.T) {
+		vector := NewVector(1, 2, 3)
+		point := NewPoint(2, 3, 4)
+
+		result, err := vector.Cross(point)
+
+		assert.ErrorIs(t, err, ErrCannotCrossPoint)
+		assert.Zero(t, result)
+	})
+
+	t.Run("cannot calculate the cross product of two points", func(t *testing.T) {
+		point1 := NewPoint(1, 2, 3)
+		point2 := NewPoint(2, 3, 4)
+
+		result, err := point1.Cross(point2)
+
+		assert.ErrorIs(t, err, ErrCannotCrossPoint)
+		assert.Zero(t, result)
+	})
+}
+
 func assertTupleEqual(t *testing.T, expected, actual Tuple) {
 	t.Helper()
 

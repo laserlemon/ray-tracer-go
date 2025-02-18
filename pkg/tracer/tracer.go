@@ -12,6 +12,7 @@ const (
 
 var (
 	ErrCannotAddPoints      = errors.New("cannot add two points")
+	ErrCannotCrossPoint     = errors.New("cannot cross a point")
 	ErrCannotDotPoint       = errors.New("cannot dot a point")
 	ErrCannotMeasurePoint   = errors.New("cannot measure a point")
 	ErrCannotNegatePoint    = errors.New("cannot negate a point")
@@ -120,4 +121,16 @@ func (t Tuple) Dot(other Tuple) (float64, error) {
 	}
 
 	return t.X*other.X + t.Y*other.Y + t.Z*other.Z, nil
+}
+
+func (t Tuple) Cross(other Tuple) (Tuple, error) {
+	if t.IsPoint() || other.IsPoint() {
+		return Tuple{}, ErrCannotCrossPoint
+	}
+
+	return NewVector(
+		t.Y*other.Z-t.Z*other.Y,
+		t.Z*other.X-t.X*other.Z,
+		t.X*other.Y-t.Y*other.X,
+	), nil
 }
