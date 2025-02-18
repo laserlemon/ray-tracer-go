@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	tupleEpsilon = 0.00001
+	epsilon = 0.00001
 )
 
 func TestNewPoint(t *testing.T) {
@@ -181,11 +181,25 @@ func TestDivide(t *testing.T) {
 	})
 }
 
+func TestMagnitude(t *testing.T) {
+	t.Run("calculates the magnitude of a vector", func(t *testing.T) {
+		vector := NewVector(2.0, 3.0, 6.0)
+
+		result, err := vector.Magnitude()
+		require.NoError(t, err)
+
+		assert.InDelta(t, 7.0, result, epsilon)
+	})
+
+	t.Run("cannot calculate the magnitude of a point", func(t *testing.T) {
+	})
+}
+
 func assertTupleEqual(t *testing.T, expected, actual Tuple) {
 	t.Helper()
 
-	assert.InDelta(t, expected.X, actual.X, tupleEpsilon)
-	assert.InDelta(t, expected.Y, actual.Y, tupleEpsilon)
-	assert.InDelta(t, expected.Z, actual.Z, tupleEpsilon)
+	assert.InDelta(t, expected.X, actual.X, epsilon)
+	assert.InDelta(t, expected.Y, actual.Y, epsilon)
+	assert.InDelta(t, expected.Z, actual.Z, epsilon)
 	assert.Equal(t, expected.W, actual.W)
 }

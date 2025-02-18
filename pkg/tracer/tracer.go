@@ -1,6 +1,9 @@
 package tracer
 
-import "errors"
+import (
+	"errors"
+	"math"
+)
 
 const (
 	pointW  = float64(1.0)
@@ -11,6 +14,7 @@ var (
 	ErrCannotAddPoints     = errors.New("cannot add two points")
 	ErrCannotSubtractPoint = errors.New("cannot subtract a point")
 	ErrCannotNegatePoint   = errors.New("cannot negate a point")
+	ErrCannotMeasurePoint  = errors.New("cannot measure a point")
 )
 
 type Tuple struct {
@@ -88,4 +92,12 @@ func (t Tuple) Divide(scalar float64) (Tuple, error) {
 		Z: t.Z / scalar,
 		W: t.W,
 	}, nil
+}
+
+func (t Tuple) Magnitude() (float64, error) {
+	if t.IsPoint() {
+		return float64(0.0), ErrCannotMeasurePoint
+	}
+
+	return math.Sqrt(math.Pow(t.X, 2) + math.Pow(t.Y, 2) + math.Pow(t.Z, 2)), nil
 }
