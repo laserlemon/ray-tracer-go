@@ -6,8 +6,8 @@ import (
 )
 
 const (
-	pointW  = float64(1.0)
-	vectorW = float64(0.0)
+	pointW  = float64(1)
+	vectorW = float64(0)
 )
 
 var (
@@ -97,7 +97,7 @@ func (t Tuple) Divide(scalar float64) (Tuple, error) {
 
 func (t Tuple) Magnitude() (float64, error) {
 	if t.IsPoint() {
-		return float64(0.0), ErrCannotMeasurePoint
+		return 0, ErrCannotMeasurePoint
 	}
 
 	return math.Sqrt(math.Pow(t.X, 2) + math.Pow(t.Y, 2) + math.Pow(t.Z, 2)), nil
@@ -108,10 +108,7 @@ func (t Tuple) Normalize() (Tuple, error) {
 		return Tuple{}, ErrCannotNormalizePoint
 	}
 
-	magnitude, err := t.Magnitude()
-	if err != nil {
-		return Tuple{}, err
-	}
+	magnitude, _ := t.Magnitude()
 
 	return t.Divide(magnitude)
 }

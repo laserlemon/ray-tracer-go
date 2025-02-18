@@ -15,7 +15,7 @@ func TestNewPoint(t *testing.T) {
 	t.Run("creates a tuple with W=1", func(t *testing.T) {
 		point := NewPoint(1.2, 2.3, 3.4)
 
-		assertTupleEqual(t, Tuple{1.2, 2.3, 3.4, 1.0}, point)
+		assertTupleEqual(t, Tuple{1.2, 2.3, 3.4, 1}, point)
 	})
 }
 
@@ -23,7 +23,7 @@ func TestNewVector(t *testing.T) {
 	t.Run("creates a tuple with W=0", func(t *testing.T) {
 		vector := NewVector(1.2, 2.3, 3.4)
 
-		assertTupleEqual(t, Tuple{1.2, 2.3, 3.4, 0.0}, vector)
+		assertTupleEqual(t, Tuple{1.2, 2.3, 3.4, 0}, vector)
 	})
 }
 
@@ -163,7 +163,7 @@ func TestMultiply(t *testing.T) {
 	t.Run("multiplies a vector by a scalar", func(t *testing.T) {
 		vector := NewVector(1.2, 2.3, 3.4)
 
-		result, err := vector.Multiply(2.0)
+		result, err := vector.Multiply(2)
 		require.NoError(t, err)
 
 		assertTupleEqual(t, NewVector(2.4, 4.6, 6.8), result)
@@ -174,7 +174,7 @@ func TestDivide(t *testing.T) {
 	t.Run("divides a vector by a scalar", func(t *testing.T) {
 		vector := NewVector(2.4, 4.6, 6.8)
 
-		result, err := vector.Divide(2.0)
+		result, err := vector.Divide(2)
 		require.NoError(t, err)
 
 		assertTupleEqual(t, NewVector(1.2, 2.3, 3.4), result)
@@ -183,16 +183,16 @@ func TestDivide(t *testing.T) {
 
 func TestMagnitude(t *testing.T) {
 	t.Run("calculates the magnitude of a vector", func(t *testing.T) {
-		vector := NewVector(2.0, 3.0, 6.0)
+		vector := NewVector(2, 3, 6)
 
 		result, err := vector.Magnitude()
 		require.NoError(t, err)
 
-		assert.InDelta(t, 7.0, result, epsilon)
+		assert.InDelta(t, 7, result, epsilon)
 	})
 
 	t.Run("cannot calculate the magnitude of a point", func(t *testing.T) {
-		point := NewPoint(2.0, 3.0, 6.0)
+		point := NewPoint(2, 3, 6)
 
 		result, err := point.Magnitude()
 
@@ -203,21 +203,21 @@ func TestMagnitude(t *testing.T) {
 
 func TestNormalize(t *testing.T) {
 	t.Run("normalizes a vector into a unit vector", func(t *testing.T) {
-		vector := NewVector(2.0, 3.0, 6.0)
+		vector := NewVector(9, 12, 20)
 
 		result, err := vector.Normalize()
 		require.NoError(t, err)
 
-		assertTupleEqual(t, NewVector(2.0/7.0, 3.0/7.0, 6.0/7.0), result)
+		assertTupleEqual(t, NewVector(0.36, 0.48, 0.80), result)
 
 		magnitude, err := result.Magnitude()
 		require.NoError(t, err)
 
-		assert.InDelta(t, 1.0, magnitude, epsilon)
+		assert.InDelta(t, 1, magnitude, epsilon)
 	})
 
 	t.Run("cannot normalize a point", func(t *testing.T) {
-		point := NewPoint(2.0, 3.0, 6.0)
+		point := NewPoint(2, 3, 6)
 
 		result, err := point.Normalize()
 
